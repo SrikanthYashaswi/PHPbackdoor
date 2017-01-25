@@ -1,0 +1,91 @@
+<head>
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Shrk</title>
+	<style>
+               body{
+			font-family:Roboto Light;
+
+		}
+               #command{
+                       	width:80%;
+			font-size:19px;
+			border:0px;
+			font-family:Roboto light;
+			color:rgba(138, 138, 138, 1);
+			margin:2px;
+               }
+		#resp{
+			width:100%;
+			height:95%;
+			background-color:rgba(245, 245, 245, 1);
+			color:rgba(138, 138, 138, 1);
+			font-size:19px;
+			font-family:Roboto light;		
+			border:0px;	
+		}
+        </style>
+</head>
+<body style="margin:0px;">
+<input type="text" id="command" onkeyup="keySupport(event)"/>
+<button onclick="execCmd()">submit</button>
+<input type="checkbox" id="edit" onclick="editToggle()"/> WRITE
+<br>
+<textarea id="resp" disabled spellcheck="false" onkeydown="textareaKeySupport(event)">
+</textarea>
+</body>
+<script>
+	function editToggle(){
+		var x = document.getElementById("edit").checked;
+		if(x==true){
+			document.getElementById("resp").disabled=false;
+		}
+		else if(x==false){
+			document.getElementById("resp").disabled=true;
+		}
+	}
+		
+        function textareaKeySupport(e){
+                var code = document.getElementById("resp");
+                var prev = code.selectionStart;
+                if(e.keyCode==9){
+                          e.preventDefault();
+                          code.value= code.value.substring(0,code.selectionStart)+"\t"+code.value.substring(code.selectionStart);
+                          code.selectionEnd=prev+1;
+                }
+        }
+	function keySupport(event){
+
+		var str = document.getElementById("command");
+		if(str.value.charAt(0)=='@'){
+			str.type="password";
+		}
+		else{
+			str.type="text";
+		}
+		if(event.keyCode==13){
+			execCmd();
+		}
+	}
+	function execCmd(){
+		var edit = document.getElementById("edit").checked;
+		var x = document.getElementById("command").value;
+		var htp = new XMLHttpRequest();
+		htp.onreadystatechange = function(){
+			if(htp.readyState==4&&htp.status==200){
+				document.getElementById("resp").value=htp.responseText;		
+			}
+		}
+		if(edit==true){
+			var code = encodeURIComponent(document.getElementById("resp").value);
+			htp.open("POST","/engine.php",true);
+			htp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			htp.send("command="+x+"&code="+code);
+		}
+		else{		
+			htp.open("GET","/engine.php?command="+x,true);
+			htp.send();
+		}
+	}
+//this is end-------
+//another end--test--
+</script>
