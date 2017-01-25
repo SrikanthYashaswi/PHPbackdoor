@@ -14,5 +14,7 @@ also since there were chances that my changes can break the whole website, i als
 <code>!read file.html</code>
 <h3> Write file </h3>
 <code>!read file.html  >  (check Write to activate textarea) > !write file.html </code>
+<h3>Restore file to last saved version </h3>
+<code>http://someaddress.com/restore.php?path=file.html</code>
 <h3>List of other commands</h3>
 <h4>--Most of the commands from cmd are supported except the commands that require elevated permission <h4>
